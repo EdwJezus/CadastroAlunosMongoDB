@@ -31,6 +31,9 @@ def submit():
     estado = request.form['estado']
     cidade = request.form['cidade']
 
+    if not all([nome, idade, sexo, estado, cidade]):
+        return "Campos faltando", 400 # aqui pode chamar uma função que apareça um alerta no javascript.
+
     pessoas.insert_one({ ## Enviando informações do form para o Banco, e criando uma nova pessoa
         "nome": nome,
         "idade": idade,
