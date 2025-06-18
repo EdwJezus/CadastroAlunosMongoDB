@@ -10,11 +10,11 @@ from pymongo import MongoClient
 
 client = MongoClient("localhost", 27017)
 
-db = client.BancoCadeiraAline
+db = client.BancoAlunos
 
-pessoas = db.pessoas
+colecao_pessoas = db.pessoas
 
-for pessoa in pessoas.find(): ## Imprimi as pessoas no Terminal para testar
+for pessoa in colecao_pessoas.find(): ## Imprimi as pessoas no Terminal para testar
     print(pessoa)
 
 ######################################## Comunicação HTML -> Flask -> MongoDB
@@ -34,7 +34,7 @@ def submit():
     if not all([nome, idade, sexo, estado, cidade]):
         return "Campos faltando", 400 # aqui pode chamar uma função que apareça um alerta no javascript.
 
-    pessoas.insert_one({ ## Enviando informações do form para o Banco, e criando uma nova pessoa
+    colecao_pessoas.insert_one({ ## Enviando informações do form para o Banco, e criando uma nova pessoa
         "nome": nome,
         "idade": idade,
         "sexo": sexo,
@@ -46,7 +46,7 @@ def submit():
 
 @app.route('/view', methods=['GET'])
 def view():
-    result = list(pessoas.find({}, {"estado": 0})) # segunda chave faz o resultado não exibir "estado"
+    result = list(colecao_pessoas.find({}, {"estado": 0})) # segunda chave faz o resultado não exibir "estado"
     return jsonify(result)
 
 if __name__ == '__main__':
