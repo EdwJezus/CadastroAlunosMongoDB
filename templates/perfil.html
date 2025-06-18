@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<style>
+        body {
+            margin: 0;
+            background-color: #e9e9e9;
+          }
+
+        .pagina {
+            display: flex;
+            flex-direction: column;
+            align-items: center;  
+            padding: 40px 20px;
+            gap: 30px;
+        }
+
+		html{
+			font-family: 'Inter', sans-serif;
+		}
+
+        fieldset{
+            background-color: white;
+            width: 400px;    
+            padding: 20px; 
+            border-radius: 20px;
+            border-style: none;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* horizontal centering */
+            gap: 1px; /* space between elements */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
+        }
+        .topbar {
+            display: flex;
+            align-items: center;
+            background-color: #398bce;
+            padding: 10px 20px;
+            color: white;
+            height: 60px;
+          }
+</style>
+<title>Meu perfil</title>
+</head>
+<body>
+    
+    <div class="topbar">
+        <div class="logo">
+            <img src="https://biblioteca.unilasalle.edu.br/site-index/img/logo.png" width="110" height="45">
+        </div>
+    </div>
+		
+    <div class="pagina">
+        <fieldset>
+            <h2>Bem vindo {{ pessoa.nome }}!</h2>
+            <h3>Você logou com sucesso!</h3>
+            <h3>Seus dados:</h3>
+
+            <p>Email: {{ pessoa.email }}</p>
+            <p>Idade: {{ pessoa.idade }}</p>
+            <p>Sexo: {{ pessoa.sexo }}</p>
+            <p>Estado: {{ pessoa.localizacao.estado }}</p>
+            <p>Cidade: {{ pessoa.localizacao.cidade }}</p>
+            <p>Profissão: {{ profissao.nome }}</p>
+        </fieldset>
+    </div>
+
+</body></html>
