@@ -1,6 +1,6 @@
 ######################################## Iniciando Flask
 
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 
 app = Flask(__name__)
 
@@ -40,6 +40,11 @@ def submit():
     })
 
     return redirect('/')
+
+@app.route('/view', methods=['GET'])
+def view():
+    result = list(pessoas.find({}, {"estado": 0})) # segunda chave faz o resultado não exibir "estado"
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(debug=True)
