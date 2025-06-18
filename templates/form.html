@@ -17,9 +17,9 @@
             gap: 30px;
         }
 
-	html{
-	    font-family: 'Inter', sans-serif;
-	}
+		html{
+			font-family: 'Inter', sans-serif;
+		}
 
         fieldset{
             background-color: white;
@@ -86,10 +86,16 @@
         <form action = "/submit" method=POST onsubmit="return showAlert()">
             <fieldset>
                 Nome:<br>
-                <input type="text" name="nome" placeholder="Ex: Eduardo">
+                <input type="text" name="nome" placeholder="Nome">
+                <br>
+                E-mail:<br>
+                <input type="email" name="email" placeholder="E-mail">
+                <br>
+                Senha:<br>
+                <input type="password" name="senha" placeholder="Senha">
                 <br>
                 Idade:<br>
-                <input type="int" name="idade" placeholder="Ex: 21">
+                <input type="int" name="idade" placeholder="Idade">
                 <br>
                 Sexo:<br>
                 <select name="sexo">
@@ -98,10 +104,13 @@
                 </select>
                 <br>
                 Estado:<br>
-                <input type="text" name="estado" placeholder="Ex: RS">
+                <input type="text" name="estado" placeholder="Estado">
                 <br>
                 Cidade:<br>
-                <input type="text" name="cidade" placeholder="Ex: Porto Alegre">
+                <input type="text" name="cidade" placeholder="Cidade">
+                <br>
+                Profissão:<br>
+                <input type="text" name="profissao" placeholder="Profissão">
                 <br><br>
                 <input type="submit" id="submit">
             </fieldset>
@@ -110,7 +119,7 @@
 
     <script>
         function showAlert() {
-          alert("Formulário enviado com sucesso!");
+          alert("Usuário cadastrado com sucesso!");
           return true;
         }
       </script>
