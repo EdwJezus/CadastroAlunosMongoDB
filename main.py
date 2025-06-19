@@ -16,6 +16,8 @@ db = client.BancoAlunos
 
 colecao_pessoas = db.pessoas
 
+colecao_profissoes = db.profissoes
+
 ## Imprime as pessoas no Terminal para testar
 for pessoa in colecao_pessoas.find(): 
     print(pessoa)
@@ -44,9 +46,18 @@ def submit():
     ## Serve para criptografar e proteger a senha
     senha_hash = generate_password_hash(senha) 
 
-    ## Separa profissão para a coleção profissoes
-    nova_profissao = {"nome": profissao} 
-    colecao_profissoes = db.profissoes.insert_one(nova_profissao)
+    ## Procura se a profissao ja existe no banco
+    profissao = profissao.lower().strip()
+    profissao_encontrada = colecao_profissoes.find_one({"nome": profissao}) 
+
+    if profissao_encontrada:
+        ## Se já existe, usa o id existente
+        profissao_id = profissao_encontrada["_id"]
+    else:
+        ## Se não existe, cria e separa profissão para a coleção profissoes
+        nova_profissao = {"nome": profissao} 
+        resultado = colecao_profissoes.insert_one(nova_profissao)
+        profissao_id = resultado.inserted_id
 
     ## Enviando informações do form para o Banco, e criando uma nova pessoa
     colecao_pessoas.insert_one({ 
@@ -60,7 +71,7 @@ def submit():
             "estado": estado,
             "cidade": cidade},
         ## Usa Modelagem Referenciada para puxar a profissao da coleção profissoes
-        "profissao_id": colecao_profissoes.inserted_id 
+        "profissao_id": profissao_id
     })
 
     return redirect('/login')
@@ -99,7 +110,7 @@ def perfil():
     pessoa = colecao_pessoas.find_one({"nome": session['usuario']}) 
     
     ## Pega o nome da profissão referenciada se existir
-    profissao = db.profissoes.find_one({"_id": pessoa["profissao_id"]}) 
+    profissao = colecao_profissoes.find_one({"_id": pessoa["profissao_id"]}) 
     
     return render_template('perfil.html', pessoa=pessoa, profissao=profissao)
 
