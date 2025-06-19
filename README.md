@@ -57,10 +57,12 @@ O projeto utiliza modelagem embutida e referenciada no MongoDB para armazenar da
 
 ## Estrutura do projeto
 
-   /
-├── main.py          # Código principal Flask com rotas e lógica
-├── templates/       # Pasta com arquivos HTML (form.html, login.html, perfil.html)
-└── README.md        # Este arquivo
+   ```bash
+      /
+   ├── main.py          # Código principal Flask com rotas e lógica
+   ├── templates/       # Pasta com arquivos HTML (form.html, login.html, perfil.html)
+   └── README.md        # Este arquivo
+   ```
 
 ---
 
