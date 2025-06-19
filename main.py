@@ -16,18 +16,21 @@ db = client.BancoAlunos
 
 colecao_pessoas = db.pessoas
 
-for pessoa in colecao_pessoas.find(): ## Imprime as pessoas no Terminal para testar
+## Imprime as pessoas no Terminal para testar
+for pessoa in colecao_pessoas.find(): 
     print(pessoa)
 
 ######################################## Comunicação HTML -> Flask -> MongoDB
 
-##################### Cadastro
+    #============== Cadastro
 
-@app.route('/') ## Definindo a rota de inicialização
+## Definindo a rota de inicialização
+@app.route('/') 
 def index():
     return render_template("form.html")
 
-@app.route('/submit', methods=['POST']) ## Puxando informações enviadas no form HTML
+## Puxando informações enviadas no form HTML
+@app.route('/submit', methods=['POST']) 
 def submit():
     nome = request.form['nome']
     email = request.form['email']
@@ -38,26 +41,31 @@ def submit():
     cidade = request.form['cidade']
     profissao = request.form['profissao']
 
-    senha_hash = generate_password_hash(senha) ## Serve para criptografar e proteger a senha
+    ## Serve para criptografar e proteger a senha
+    senha_hash = generate_password_hash(senha) 
 
-    nova_profissao = {"nome": profissao} ## Separa profissão para a coleção profissoes
+    ## Separa profissão para a coleção profissoes
+    nova_profissao = {"nome": profissao} 
     colecao_profissoes = db.profissoes.insert_one(nova_profissao)
 
-    colecao_pessoas.insert_one({ ## Enviando informações do form para o Banco, e criando uma nova pessoa
+    ## Enviando informações do form para o Banco, e criando uma nova pessoa
+    colecao_pessoas.insert_one({ 
         "nome": nome,
         "email": email,
         "senha": senha_hash,
         "idade": idade,
         "sexo": sexo,
-        "localizacao": { ## Modelagem Embutida
+        ## Modelagem Embutida
+        "localizacao": { 
             "estado": estado,
             "cidade": cidade},
-        "profissao_id": colecao_profissoes.inserted_id ## Usa Modelagem Referenciada para puxar a profissao da coleção profissoes
+        ## Usa Modelagem Referenciada para puxar a profissao da coleção profissoes
+        "profissao_id": colecao_profissoes.inserted_id 
     })
 
     return redirect('/login')
 
-######################## Login
+    #============== Login
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -65,26 +73,33 @@ def login():
         email = request.form['email']
         senha = request.form['senha']
 
-        usuario = colecao_pessoas.find_one({"email": email}) ## Procura no banco pelo email
-        if usuario and check_password_hash(usuario['senha'], senha): ## Verifica se usuario existe no banco e se a senha esta correta
-            session['usuario'] = usuario['nome'] ## Coloca o nome do usuario na sessao
-            return redirect('/perfil') ## Se login bem sucedido segue para o perfil
+        ## Procura no banco pelo email
+        usuario = colecao_pessoas.find_one({"email": email}) 
+        ## Verifica se usuario existe no banco e se a senha esta correta]
+        if usuario and check_password_hash(usuario['senha'], senha): 
+            ## Coloca o nome do usuario na sessao
+            session['usuario'] = usuario['nome'] 
+            ## Se login bem sucedido segue para o perfil
+            return redirect('/perfil') 
         
-        else: ## Else caso usuario e senha digitado estejam errados
+        ## Else caso usuario e senha digitado estejam errados
+        else: 
             return "Email ou senha ínvalidos"
         
     return render_template('login.html')
 
-########################## Perfil
+    #============== Perfil
 
 @app.route('/perfil')
 def perfil():
     if 'usuario' not in session:
         return redirect('/login')
     
-    pessoa = colecao_pessoas.find_one({"nome": session['usuario']}) ## Pega os dados completos da pessoa logada
+    ## Pega os dados completos da pessoa logada
+    pessoa = colecao_pessoas.find_one({"nome": session['usuario']}) 
     
-    profissao = db.profissoes.find_one({"_id": pessoa["profissao_id"]}) ## Pega o nome da profissão referenciada se existir
+    ## Pega o nome da profissão referenciada se existir
+    profissao = db.profissoes.find_one({"_id": pessoa["profissao_id"]}) 
     
     return render_template('perfil.html', pessoa=pessoa, profissao=profissao)
 
